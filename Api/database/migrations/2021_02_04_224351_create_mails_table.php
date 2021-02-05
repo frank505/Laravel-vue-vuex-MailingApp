@@ -23,6 +23,7 @@ class CreateMailsTable extends Migration
             $table->string('subject');
             $table->string('text_content');
             $table->string('html_content',500);
+            $table->enum('status', ['Posted', 'Sent', 'Failed']);
             $table->timestamps();
         });
     }
