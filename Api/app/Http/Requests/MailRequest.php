@@ -25,6 +25,8 @@ class MailRequest extends FormRequest
             "to"=>"required",
             "subject"=>"required",
             "html_content"=>"required",
+            'text_content'=>'required',
+
         ];
     }
     /**
@@ -39,7 +41,8 @@ class MailRequest extends FormRequest
             'from.required' => 'from field is required',
             'to.required' => 'to field is required',
             'subject.required'=>'subject field is required',
-            'html_content.required'=>'html content field is required'
+            'html_content.required'=>'html content field is required',
+            'text_content.required'=>'text content field is required'
         ];
     }
 

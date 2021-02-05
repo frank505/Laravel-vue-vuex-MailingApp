@@ -27,18 +27,13 @@ class MailController extends Controller
     public function createMail(MailRequest $request)
     {
         $request->validated();
+
         /**
         * check if all file extensions are correct and of appropiate size
          */
-      $responseCheckFile = $this->fileService->checkFiles($request);
+    $this->fileService->checkFiles($request);
 
-      if($responseCheckFile->success==false)
-      {
-          $message = $responseCheckFile->message;
-
-       return  $this->httpResponse->is400Response($message);
-      }
-      $postedBy = Authenticate::guard('users')->id;
+      $postedBy = Authenticate::guard('users')->user()->id;
 
       $this->mails->createMails($request,$postedBy);
 
@@ -46,7 +41,12 @@ class MailController extends Controller
 
       $uploadFiles = $this->fileService->uploadFiles($request,$lastInserted->id);
 
-      $this->attach->multipleInsertFileNames($uploadFiles);
+      $checkIfAnyFileWasUploaded= count($uploadFiles);
+
+      if($checkIfAnyFileWasUploaded > 0)
+      {
+          $this->attach->multipleInsertFileNames($uploadFiles);
+      }
 
       $responseMessge = "email was sent successfully";
 

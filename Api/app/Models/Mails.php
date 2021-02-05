@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\Mails as MailsContract;
+use Illuminate\Support\Str;
 
 class Mails extends Model implements MailsContract
 {
@@ -12,18 +13,20 @@ class Mails extends Model implements MailsContract
 
     protected $table = "mails";
 
-    protected $fillable = ["uuid","posted_by_id","from","to","subject","html_content","status"];
+    protected $fillable = ["uuid","posted_by_id","from","to","subject",
+        "html_content","status","text_content"];
 
 
     public function createMails($request,$PostedBy)
     {
-        $uuid = '';
+        $uuid = Str::orderedUuid()->toString();
         return  $this->create([
               "uuid"=>$uuid,
               'posted_by_id'=>$PostedBy,
               "from"=>$request->from,
               "to"=>$request->to,
               "subject"=>$request->subject,
+              "text_content"=>$request->text_content,
               "html_content"=>$request->html_content,
               "status"=>"Posted"
           ]);
@@ -66,7 +69,7 @@ class Mails extends Model implements MailsContract
     public function getLastPostedItemBySpecificUser($PostedBy)
     {
         // TODO: Implement getLastPostedItemBySpecificUser() method.
-        return $this->where(["posted_by"=>$PostedBy])->with('attachements')->latest()->first();
+        return $this->where(["posted_by_id"=>$PostedBy])->with('attachements')->latest()->first();
     }
 
 }
