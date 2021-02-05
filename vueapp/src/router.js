@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './pages/auth/parentview/Home.vue'
-import Login from './pages/auth/childview/Login.vue'
-import Register from './pages/auth/childview/Register.vue'
-import Dashboard from './pages/dashboard/parentview/Dashboard.vue'
+import Login from './pages/auth/child/Login.vue'
+import Register from './pages/auth/child/Register.vue'
 import Cookies from 'js-cookie'
+import Home from "./pages/auth/root/Home";
 
 Vue.use(Router)
 
@@ -27,10 +26,10 @@ const router =  new Router({
                 }
             ],
         },
-        {
-            path:'/dashboard',
-            component:Dashboard,
-        }
+        // {
+        //     path:'/dashboard',
+        //     component:Dashboard,
+        // }
     ]
 });
 
