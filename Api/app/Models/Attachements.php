@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Attachements extends Model
 {
     use HasFactory;
+
+    protected $table = "attachements";
+    protected $fillable = ["file_name","mail_id"];
+
+
+
 }

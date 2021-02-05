@@ -9,5 +9,9 @@ class Mails extends Model
 {
     use HasFactory;
 
+    protected $table = "mails";
+
+    protected $fillable = ["uuid","posted_by_id","from","to","subject","html_content"];
+
 
 }
