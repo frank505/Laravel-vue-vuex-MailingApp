@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,6 +14,8 @@ class User extends Authenticatable implements JWTSubject,AuthContract
 {
 
     use  Notifiable;
+
+
 
     // Rest omitted for brevity
 
@@ -68,6 +70,19 @@ class User extends Authenticatable implements JWTSubject,AuthContract
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function createUser($data)
+    {
+        // TODO: Implement createUser() method.
+        $passwordHash = Hash::make($data->password);
+        $data = [
+          "name"=>$data->name,
+          "email"=>$data->email,
+           "password"=>$passwordHash
+        ];
+
+        return $this->create($data);
+    }
 
 
 }

@@ -16,7 +16,7 @@ class CreateMailsTable extends Migration
         Schema::create('mails', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();
-            $table->string('posted_by_id');
+            $table->bigInteger('posted_by_id')->unsigned();
             $table->foreign('posted_by_id')->references('id')->on('users');
             $table->string('from');
             $table->string('to');

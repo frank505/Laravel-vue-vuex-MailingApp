@@ -1,7 +1,7 @@
-<?php 
+<?php
 namespace App\Contracts;
 
-interface AuthContract 
+interface AuthContract
 {
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -15,5 +15,12 @@ interface AuthContract
      * @return array
      */
     public function getJWTCustomClaims();
-    
+
+    /**
+     * Return success response message is data was saved successfully
+     * @param $data
+     * @return mixed
+     */
+    public function createUser($data);
+
 }

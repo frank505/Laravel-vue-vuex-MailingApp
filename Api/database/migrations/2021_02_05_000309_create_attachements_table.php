@@ -15,10 +15,10 @@ class CreateAttachementsTable extends Migration
     {
         Schema::create('attachements', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('file_name');
-            $table->integer('mail_id');    
+            $table->bigInteger('mail_id')->unsigned();
             $table->foreign('mail_id')->references('id')->on('mails');
+            $table->timestamps();
         });
     }
 

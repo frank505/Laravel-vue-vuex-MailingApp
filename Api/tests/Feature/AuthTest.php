@@ -2,32 +2,78 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\JWT;
+use Illuminate\Support\Facades\Auth as Authenticate;
 
-class AuthTest extends TestCase
+ class AuthTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testLogin()
-    {
-        $response = $this->post('/api/login');
 
-        $response->assertStatus(200);
+    use DatabaseTransactions;
+
+    protected $userData;
+
+
+    public function setUp():void
+    {
+        parent::setUp();
+        $this->userData = factory(User::class)->make();
+
     }
 
-    //    public function actingAs(JWTSubject $user, $driver = null)
-//    {
-//
-//        $token = new JWT;
-//        $token = $token->fromUser($user);
-//        $this->withHeader('Authorization', "Bearer {$token}");
-//        parent::actingAs($user);
-//
-//        return $this;
-//    }
+  public function createUser()
+  {
+      return  factory(User::class)->times(1)->create();
+  }
+
+    public function testLogin()
+    {
+
+         $this->createUser();
+
+         $credentials = [
+           "email"=>$this->userData->email,
+           "password"=> 'password'
+         ];
+        $response = $this->postJson('/api/login', $credentials);
+
+      $response->
+          assertStatus(200)
+       ->assertJson([
+           "success"=>true,
+            "message"=> 'login was successful'
+        ]);
+    }
+
+
+    public function registration()
+    {
+       $this->createUser();
+
+        $credentials = [
+            "name"=>$this->userData->name,
+            "email"=>$this->userData->email,
+            "password"=> 'password'
+        ];
+        $response = $this->postJson('/api/register',$credentials);
+
+        $response->assertStatus(200)
+            ->assertJson(
+                ["success"=>true,
+                    "message"=>"registration was successful"
+                    ]
+            );
+    }
+
+
+
+
+
 }
