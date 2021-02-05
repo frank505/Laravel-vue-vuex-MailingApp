@@ -15,7 +15,7 @@ class Attachements extends Model implements  AttachementsContract
 
     public function mail()
     {
-        return $this->belongsTo('App\Models\Mail','mail_id','id');
+        return $this->belongsTo('App\Models\Mails','mail_id','id');
     }
 
     public function multipleInsertFileNames($uploadFiles)

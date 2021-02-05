@@ -44,7 +44,7 @@ class Mails extends Model implements MailsContract
 
     public function attachements()
     {
-        return $this->hasMany('App\Models\Attachements','id','mail_id');
+        return $this->hasMany('App\Models\Attachements','mail_id','id');
     }
 
     /**
