@@ -11,7 +11,7 @@ class Mails extends Model
 
     protected $table = "mails";
 
-    protected $fillable = ["uuid","posted_by_id","from","to","subject","html_content"];
+    protected $fillable = ["uuid","posted_by_id","from","to","subject","html_content","status"];
 
 
 }

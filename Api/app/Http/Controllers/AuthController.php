@@ -38,6 +38,8 @@ class AuthController extends Controller
 
         $data = ["token"=>$tokenCred];
 
+
+
     return $this->httpResponse->is200WithResponseData($responseMessage,$data);
     }
 
