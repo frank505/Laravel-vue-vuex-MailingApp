@@ -84,8 +84,6 @@ class MailTest extends TestCase
         $this->createUser();
         $token = Authenticate::guard('users')->attempt($this->credentials());
 
-        $this->testUploadFile($this->userData->id);
-
         $user = auth('users')->authenticate($token);
 
         $data = $this->dataCreateMail($user->id);
@@ -100,18 +98,22 @@ class MailTest extends TestCase
 
     public function testCreateMail()
     {
-        $dataSet = $this->setData();
+        $this->createUser();
+        $token = Authenticate::guard('users')->attempt($this->credentials());
+
+        $user = auth('users')->authenticate($token);
+
+        $data = $this->dataCreateMail($user->id);
 
         $headers = [
-            "Authorization"=>'Bearer '.$dataSet["token"]
+            'Authorization'=>'Bearer '.$token
         ];
 
-        $response = $this->post('/api/create-mail',$dataSet["data"],$headers);
+        $response = $this->post('/api/create-mail',$data['data'],$headers);
         $response->
         assertStatus(200)
         ->assertJson([
             "success"=>true,
-            "message"=>"mail was sent successfully"
         ]);
     }
 
@@ -138,16 +140,45 @@ class MailTest extends TestCase
     }
 
 
-    public function testUploadFile($mail_id)
+    public function testCreateMailWithFiles()
+    {
+        $this->createUser();
+        $token = Authenticate::guard('users')->attempt($this->credentials());
+
+        $user = auth('users')->authenticate($token);
+
+        $data = $this->dataCreateMail($user->id);
+
+        $headers = [
+            'Authorization'=>'Bearer '.$token
+        ];
+
+
+        $response = $this->post('/api/create-mail',$data['data'],$headers);
+
+        $mails = new Mails();
+
+        $lastInsertedByUserId = $mails->getLastPostedItemBySpecificUser($user->id);
+
+        $this->uploadFile($lastInsertedByUserId);
+
+        $response->
+        assertStatus(200)
+            ->assertJson([
+                "success"=>true,
+            ]);
+    }
+
+
+    public function uploadFile($mail_id)
     {
         Storage::fake('avatars');
 
-        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file = UploadedFile::fake()->create('avatar.jpg',100);
 
-        Storage::disk('avatars')->assertExists($file->hashName());
 
         factory(Attachements::class)->create([
-           'file_name'=>$file,
+           'file_name'=>$file->getClientOriginalName(),
            'mail_id'=>$mail_id
         ]);
 
@@ -171,5 +202,38 @@ class MailTest extends TestCase
                 'success'=>true
             ]);
     }
+
+
+    public function testFilterMails($filterData)
+    {
+        $this->createUser();
+        $token = Authenticate::guard('users')->attempt($this->credentials());
+
+        $user = auth('users')->authenticate($token);
+
+        $data = $this->dataCreateMail($user->id);
+
+        $headers = [
+            'Authorization'=>'Bearer '.$token
+        ];
+
+        $this->post('/api/create-mail',$data['data'],$headers);
+
+         $from = $data['data']['from'];
+         $to = $data['data']['to'];
+         $subject= $data['data']['subject'];
+
+        $dataFilter = "?from=$from&to=$to&subject=$subject";
+
+        $response = $this->get('/api/get-filter-mails'.$dataFilter, $headers);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success'=>true
+            ]);
+
+    }
+
+
 
 }

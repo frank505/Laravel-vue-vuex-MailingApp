@@ -26,7 +26,7 @@ class MailController extends Controller
 
     public function createMail(MailRequest $request)
     {
-        $request->validated();
+      $request->validated();
 
         /**
         * check if all file extensions are correct and of appropiate size

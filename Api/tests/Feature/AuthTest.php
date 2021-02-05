@@ -55,7 +55,6 @@ use Illuminate\Support\Facades\Auth as Authenticate;
 
     public function testRegister()
     {
-       $this->createUser();
 
         $credentials = [
             "name"=>$this->userData->name,
