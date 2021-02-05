@@ -115,7 +115,7 @@
          width:50%;
          margin-left:25%;
          margin-right: 25%;
-         margin-top: 200px;
+         margin-top: 120px;
          padding:5%;
      }
      .custom-style-btn-one
