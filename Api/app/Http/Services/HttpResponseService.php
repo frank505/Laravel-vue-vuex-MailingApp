@@ -2,8 +2,7 @@
 namespace App\Http\Services;
 
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
+
 
 class HttpResponseService
 {
@@ -67,6 +66,6 @@ class HttpResponseService
     }
 
 
- 
+
 
 }
