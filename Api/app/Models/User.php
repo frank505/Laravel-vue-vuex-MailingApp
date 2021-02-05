@@ -8,9 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use DB;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Contracts\AuthContracts;
 
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject,AuthContracts
 {
 
     use  Notifiable;
