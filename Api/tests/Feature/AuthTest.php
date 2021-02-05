@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\Auth as Authenticate;
     }
 
 
-    public function registration()
+    public function testRegister()
     {
        $this->createUser();
 
