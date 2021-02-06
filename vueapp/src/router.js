@@ -7,6 +7,7 @@ import Home from "./pages/auth/root/Home";
 import Dashboard from "./pages/dashboard/root/Dashboard";
 import MailLists from "./pages/dashboard/child/MailLists";
 import CreateMail from "./pages/dashboard/child/CreateMail";
+import ViewMail from "./pages/dashboard/child/ViewMail";
 
 Vue.use(Router)
 
@@ -41,6 +42,10 @@ const router =  new Router({
                 {
                     path:'create-mail',
                     component: CreateMail
+                },
+                {
+                    path:'view-mail/:uuid',
+                    component: ViewMail
                 }
             ]
         }

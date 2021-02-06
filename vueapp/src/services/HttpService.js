@@ -7,7 +7,7 @@ class HttpService
 
     setUrl = () =>
     {
-        let url = "http://localhost:8000/api";
+        let url = "http://0.0.0.0/api";
 
         return url;
     }
@@ -15,7 +15,7 @@ class HttpService
 
     appDomain = () =>
     {
-        let url = "http://admin.virtualmusicafrica.com";
+        let url = "http://0.0.0.0/api";
         return url;
     }
 

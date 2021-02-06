@@ -51,7 +51,13 @@
                 @blur="$v.text_content.$touch()"
                 ></v-textarea>
 
+                <vue-editor v-model="html_content"></vue-editor>
 
+                <v-file-input
+                        small-chips
+                        multiple
+                        label="Attach Files Here"
+                ></v-file-input>
 
                 <v-btn
                         class="mr-4 custom-style-btn-one"
@@ -78,6 +84,8 @@
 
     import { validationMixin } from 'vuelidate'
     import { required } from 'vuelidate/lib/validators'
+    import { VueEditor } from "vue2-editor";
+
 
     export default {
         mixins: [validationMixin],
@@ -94,8 +102,8 @@
             from: '',
             to: '',
             subject:'',
-            html_content:'',
-            text_content:''
+            html_content:"<h1>Some initial content</h1>",
+            text_content:'',
         }),
 
         computed: {
@@ -149,6 +157,9 @@
             },
 
         },
+        components:{
+            VueEditor
+        }
     }
 
 </script>

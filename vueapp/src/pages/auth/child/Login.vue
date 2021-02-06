@@ -13,6 +13,24 @@
 
             <form>
 
+                <v-alert
+                        dense
+                        text
+                        :type="loginResponse.success==false?'error':
+                                 loginResponse.success==true?
+                              'success'
+                           :
+                          ''"
+                        :style="loginResponse.success==false?'display:block':
+                                 loginResponse.success==true?
+                              'display:block'
+                           :
+                          'display:none'"
+                >
+                   {{loginResponse.message}}
+                </v-alert>
+
+
                 <v-text-field
                         v-model="email"
                         :error-messages="emailErrors"
@@ -36,7 +54,6 @@
                 <v-btn
                         class="mr-4 custom-style-btn-one"
                         @click="submit"
-
                 >
                     submit
                 </v-btn>
@@ -58,6 +75,8 @@
 
     import { validationMixin } from 'vuelidate'
     import { required, maxLength, email } from 'vuelidate/lib/validators'
+    import { mapState, mapActions } from "vuex";
+    import {checkIfFieldsAreEmpty} from "../../../utilities/helperFunc";
 
     export default {
         mixins: [validationMixin],
@@ -70,9 +89,12 @@
         data: () => ({
             email: '',
             password: '',
+
         }),
 
         computed: {
+
+            ...mapState("Auth", ["loginResponse"]),
 
             passwordErrors () {
                 const errors = []
@@ -90,9 +112,21 @@
             },
         },
 
+
+
         methods: {
+
+            ...mapActions("Auth", ["login","clearLoginState"]),
+
             submit () {
                 this.$v.$touch()
+                let data = {email:this.email,password:this.password};
+                if(checkIfFieldsAreEmpty(data)==false)
+                {
+                    return;
+                }
+                //
+                this.login(data);
             },
             clear () {
                 this.$v.$reset()
