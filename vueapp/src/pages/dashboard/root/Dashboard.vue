@@ -62,25 +62,36 @@
                 dark
                 scroll-target="#scrolling-techniques-6"
         >
-            <v-app-bar-nav-icon @click.stop="draw = !draw" ></v-app-bar-nav-icon>
+
+
+            <v-app-bar-nav-icon
+                    :style="this.showMe"
+                    @click.stop="draw = !draw" ></v-app-bar-nav-icon>
+
+          <v-app-bar-title :style="this.showMeBackButton">
+              <v-icon
+                      large
+                      color="white"
+                      @click="goBackToPreviousPage"
+                      style="margin-right:30px;cursor:pointer"
+              >
+                  mdi-arrow-left
+              </v-icon>
+          </v-app-bar-title>
 
             <v-toolbar-title>MiniSend</v-toolbar-title>
 
             <v-spacer>
-                <v-text-field
-                         class="custom-text-field"
-                        label="Click Here To Filter Mails"
-                        filled
-                        rounded
-                        prepend-inner-icon="mdi-map-marker"
-                        dense
-                ></v-text-field>
             </v-spacer>
 
-            <v-checkbox
-                    color="white"
-                    hide-details
-            ></v-checkbox>
+            <v-btn icon @click="loadModalSearch">
+                <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+
+            <v-btn icon @click="logout">
+                <v-icon>mdi-logout</v-icon>
+            </v-btn>
+
         </v-app-bar>
 
 
@@ -89,10 +100,7 @@
             <router-view></router-view>
         </div>
 
-
-
-
-
+          <Modal></Modal>
 
     </v-app>
 
@@ -102,19 +110,76 @@
 
 
 
+
+    import {LogoutService} from "../../../services/auth/AuthService";
+    import Modal from "../../../components/dashboard/Modal";
+    import {mapActions} from "vuex";
+
     export default {
         name: "Dashboard",
         components:{
+            Modal
 
         },
         data: () => ({
             collapseOnScroll: true,
+            showMe:"display:block",
+            showMeBackButton:"display:none",
+            dialog:false,
             draw:null,
             items: [
                 { title: 'View Mails', icon: 'mdi-home-city', url: '/dashboard/mail-lists' },
                 { title: 'Send Mail', icon: 'mdi-account-group-outline',url:'/dashboard/create-mail' },
+
             ],
         }),
+
+        methods:{
+            ...mapActions('Mail',['hideMailFilterModal','showMailFilterModal']),
+            hideOrShowButtonForNavigation()
+            {
+                let $currentLocation = window.location.pathname;
+                let $splitLocation = $currentLocation.split('/');
+                console.log($splitLocation[2]);
+                if($splitLocation[2] == 'view-mail')
+                {
+                    this.showMe="display:none";
+                    this.showMeBackButton = "display:block";
+                }else
+                {
+                    this.showMe = "display:block";
+                    this.showMeBackButton = "display:none";
+                }
+            },
+            goBackToPreviousPage ()
+            {
+                this.$router.back();
+            },
+            logout()
+            {
+                LogoutService().then(()=>
+                {
+                    this.$router.push("/login");
+                });
+
+
+            },
+            loadModalSearch()
+            {
+                console.log('this is the enter oooo')
+                this.showMailFilterModal();
+            }
+        },
+        watch:{
+
+            $route ()
+            {
+            this.hideOrShowButtonForNavigation();
+            }
+        },
+        created() {
+           // this.hideOrShowButtonForNavigation();
+        }
     }
 </script>
 

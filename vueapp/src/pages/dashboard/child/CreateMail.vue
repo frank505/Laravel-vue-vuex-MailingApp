@@ -13,6 +13,9 @@
 
             <form>
 
+
+
+
                 <v-text-field
                         v-model="from"
                         :error-messages="fromErrors"
@@ -56,8 +59,27 @@
                 <v-file-input
                         small-chips
                         multiple
+                        @change="onFileChange"
                         label="Attach Files Here"
                 ></v-file-input>
+
+
+                <v-alert
+                        dense
+                        text
+                        :type="createMail.success==false?'error':
+                                 createMail.success==true?
+                              'success'
+                           :
+                          ''"
+                        :style="createMail.success==false?'display:block':
+                                 createMail.success==true?
+                              'display:block'
+                           :
+                          'display:none'"
+                >
+                    {{createMail.message}}
+                </v-alert>
 
                 <v-btn
                         class="mr-4 custom-style-btn-one"
@@ -85,6 +107,8 @@
     import { validationMixin } from 'vuelidate'
     import { required } from 'vuelidate/lib/validators'
     import { VueEditor } from "vue2-editor";
+    import {checkIfFieldsAreEmpty} from "../../../utilities/helperFunc";
+    import {mapState, mapActions} from 'vuex'
 
 
     export default {
@@ -104,9 +128,11 @@
             subject:'',
             html_content:"<h1>Some initial content</h1>",
             text_content:'',
+            files:''
         }),
 
         computed: {
+            ...mapState("Mail", ["createMail"]),
 
             fromErrors () {
                 const errors = []
@@ -143,10 +169,41 @@
             },
         },
 
+
         methods: {
+            ...mapActions("Mail", ["createMailAction","clearCreateMailState"]),
             submit () {
                 this.$v.$touch()
+                let dataToCheck = {
+                    from: this.from,
+                    to: this.to,
+                    subject: this.subject,
+                    html_content:this.html_content,
+                    text_content:this.text_content,
+                }
+
+                if(checkIfFieldsAreEmpty(dataToCheck)==false)
+                {
+                    return;
+                }
+
+                let fd = new FormData();
+                fd.append('from',this.from);
+                fd.append('to',this.to);
+                fd.append('subject',this.subject);
+                fd.append('html_content',this.html_content);
+                fd.append('text_content',this.text_content);
+                fd.append('attachment',this.files);
+
+                  this.createMailAction(fd);
             },
+
+
+            onFileChange(e)
+            {
+                this.files = e;
+            },
+
             clear () {
                 this.$v.$reset()
                 this.from = ''
@@ -157,6 +214,14 @@
             },
 
         },
+
+        beforeRouteLeave (to, from, next) {
+            console.log(this.$store._actions);
+            this.clearCreateMailState()
+            next();
+
+        },
+
         components:{
             VueEditor
         }

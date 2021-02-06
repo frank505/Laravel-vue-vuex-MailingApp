@@ -26,7 +26,7 @@ class Mails extends Model implements MailsContract
 
     public function createMails($request,$PostedBy)
     {
-        Cache::forget('posts_content');
+        Cache::forget('post_content');
         Cache::forget('reciepient_content.'.$request->to);
         Cache::forget('posted_by.'.$PostedBy);
         $uuid = Str::orderedUuid()->toString();
@@ -37,7 +37,7 @@ class Mails extends Model implements MailsContract
               "to"=>$request->to,
               "subject"=>$request->subject,
               "text_content"=>$request->text_content,
-              "html_content"=>$request->html_content,
+              "html_content"=> addslashes($request->html_content),
               "status"=>"Posted"
           ]);
 
@@ -51,10 +51,10 @@ class Mails extends Model implements MailsContract
     {
         // TODO: Implement getMails() method.
 
-       return  Cache::remember('post_content',33600,function() use ($perPage){
+//       return  Cache::remember('post_content',33600,function() use ($perPage){
 
-            return $this->with('attachements')->paginate($perPage);
-        });
+            return $this->with('attachements')->orderBy("id","DESC")->paginate($perPage);
+//        });
 
 
     }
@@ -104,5 +104,34 @@ class Mails extends Model implements MailsContract
         });
 
     }
+
+
+    public function filterMail($searchData,$Perpage)
+    {
+        // TODO: Implement filterMail() method.
+        $from = !isset($searchData->from ) || $searchData->from=='' ||
+        $searchData->from==null ?false:true;
+
+        $to = !isset($searchData->to) || $searchData->to==''
+        || $searchData->to==null ?false:true;
+
+        $subject = !isset($searchData->subject) || $searchData->subject == '' ||
+        $searchData->subject==null ?false:true;
+
+
+        return $this->when($from,function($query) use ($searchData)
+        {
+            return  $query->where("from","LIKE","%$searchData->from%");
+        })
+            ->when($to,function($query) use ($searchData)
+            {
+                return  $query->where("to","LIKE","%$searchData->to%");
+            })
+            ->when($subject,function($query) use ($searchData)
+            {
+                return  $query->where("subject","LIKE","%$searchData->subject%");
+            })->with('attachements')->orderBy("id","DESC")->paginate($Perpage);
+    }
+
 
 }

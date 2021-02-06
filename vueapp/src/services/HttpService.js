@@ -102,7 +102,36 @@ class HttpService
         return requestOptions;
     }
 
+    postDataWithFormData = async (item, addedUrl, postType, tokenId = '') => {
+        const token = await Cookies.get(tokenId);
 
+        const requestOptions = this.postRequestOptionsWithFormData(
+            token,
+            item,
+            postType,
+        );
+
+        console.log(this.setUrl() + '/' + addedUrl);
+
+        return fetch(
+            this.setUrl() + '/' + addedUrl,
+            requestOptions,
+        ).then((response) => response.json());
+    };
+
+
+    postRequestOptionsWithFormData = (token, item, postType) => {
+        let requestOptions = {
+            method: postType,
+            headers: {
+                Authorization: 'Bearer ' + token,
+            },
+
+            body: item,
+        };
+
+        return requestOptions;
+    };
 
 }
 

@@ -8,26 +8,28 @@ use App\Http\Services\HttpResponseService;
 use App\Models\Attachements;
 use App\Models\Mails;
 use Illuminate\Http\Request;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\Auth as Authenticate;
 
 class MailController extends Controller
 {
     //
-    protected $attach,$mails,$httpResponse,$fileService;
+    protected $attach,$mails,$httpResponse,$fileService,$baseUrl;
 
-    public function __construct()
+
+    public function __construct(UrlGenerator $url)
     {
         $this->middleware('auth:users');
         $this->mails = new Mails();
         $this->attach = new Attachements();
         $this->httpResponse = new HttpResponseService();
         $this->fileService = new FileUploadService();
+        $this->baseUrl = $url->to("/");
     }
 
     public function createMail(MailRequest $request)
     {
       $request->validated();
-
         /**
         * check if all file extensions are correct and of appropiate size
          */
@@ -70,7 +72,11 @@ class MailController extends Controller
     {
      $data = $this->mails->getMail($uuid);
 
+     $decodeString = $data->html_content;
+
      $responseMessage = "data";
+
+     $data = ["base_url"=>$this->baseUrl."/attachedTasks","data"=>$data,"html_content"=>$decodeString];
 
      return $this->httpResponse->is200WithResponseData($responseMessage,$data);
     }
@@ -84,6 +90,19 @@ class MailController extends Controller
      $responseMessage = "data";
 
      return $this->httpResponse->is200WithResponseData($responseMessage,$data);
+
+    }
+
+
+    public function filterMailData(Request $request)
+    {
+        $perPage = 10;
+
+        $filterMail = $this->mails->filterMail($request, $perPage);
+
+        $responseMessage = "filter data";
+
+        return $this->httpResponse->is200WithResponseData($responseMessage,$filterMail);
 
     }
 }

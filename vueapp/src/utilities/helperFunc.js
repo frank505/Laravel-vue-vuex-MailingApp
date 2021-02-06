@@ -41,3 +41,10 @@ export const checkIfFieldsAreEmpty = (dataObject) => {
      */
     return true;
 };
+
+
+export const  decodeHtmlEncodedString  = (html) => {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}

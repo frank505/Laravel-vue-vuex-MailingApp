@@ -32,7 +32,7 @@ export const LogoutService =()=>
 {
     return new Promise(function(resolve)
     {
-        Cookies.remove('vt-music');
+        Cookies.remove('user-auth');
         resolve(true);
     });
 }
