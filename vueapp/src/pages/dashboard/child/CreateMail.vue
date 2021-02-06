@@ -56,6 +56,7 @@
                 <v-file-input
                         small-chips
                         multiple
+                        @change="onFileChange"
                         label="Attach Files Here"
                 ></v-file-input>
 
@@ -85,6 +86,7 @@
     import { validationMixin } from 'vuelidate'
     import { required } from 'vuelidate/lib/validators'
     import { VueEditor } from "vue2-editor";
+    import {checkIfFieldsAreEmpty} from "../../../utilities/helperFunc";
 
 
     export default {
@@ -104,6 +106,7 @@
             subject:'',
             html_content:"<h1>Some initial content</h1>",
             text_content:'',
+            files:''
         }),
 
         computed: {
@@ -146,7 +149,42 @@
         methods: {
             submit () {
                 this.$v.$touch()
+                let dataToCheck = {
+                    from: this.from,
+                    to: this.to,
+                    subject: this.subject,
+                    html_content:this.html_content,
+                    text_content:this.text_content,
+                }
+
+                if(checkIfFieldsAreEmpty(dataToCheck)==false)
+                {
+                    return;
+                }
+
+                let dataToSubmit = this.submitWithFormData(dataToCheck);
+                  console.log(dataToSubmit);
             },
+
+            submitWithFormData(data)
+            {
+                let formData = new FormData();
+                formData.append('from',data.from);
+                formData.append('to',data.to);
+                formData.append('subject',data.subject);
+                formData.append('html_content',data.html_content);
+                formData.append('text_content',data.text_content);
+                formData.append('attachment',this.files);
+            },
+
+            //once file changes return the file object
+            onFileChange(e)
+            {
+                this.files = e.target.files;
+                console.log(this.files);
+                return this.files;
+            },
+
             clear () {
                 this.$v.$reset()
                 this.from = ''
