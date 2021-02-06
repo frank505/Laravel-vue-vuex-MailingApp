@@ -1,7 +1,7 @@
-import { LoginService, RegisterService } from "../../services/auth/AuthService";
+import { LoginService, RegisterService } from "../../../services/auth/AuthService";
 import * as Types from "./MutationTypes"
 import Cookies from 'js-cookie'
-import router from '../../router'
+import router from '../../../router'
 
 export default {
     namespaced: true,
@@ -29,16 +29,15 @@ export default {
             }else if(typeof data.error =='object')
             {
                 Object.keys(data.error).map((keys)=>{
-                    
+
                     let dataErr = {success:false,message:data.error[keys][0]};
                    state.loginResponse = dataErr;
-                   
+
                   });
             }else if(typeof data.error == 'string')
             {
                 let dataErr = {success:false, message:data.error};
                 state.loginResponse = dataErr;
-            
             }
            },
          [Types.RESTART_REGISTER_RESPONSE] (state) {
@@ -50,7 +49,7 @@ export default {
         [Types.REGISTER_SUCCESS] (state, data) {
                 state.registerResponse = data;
             },
-        [Types.REGISTER_ERROR] (state, data) 
+        [Types.REGISTER_ERROR] (state, data)
         {
             if(typeof data.error == 'undefined')
             {
@@ -60,18 +59,18 @@ export default {
             }else if(typeof data.error =='object')
             {
                 Object.keys(data.error).map((keys)=>{
-                    
+
                     let dataErr = {success:false,message:data.error[keys][0]};
                    state.registerResponse = dataErr;
-                   
+
                   });
             }else if(typeof data.error == 'string')
             {
                 let dataErr = {success:false, message:data.error};
                 state.registerResponse = dataErr;
-            
+
             }
-        },         
+        },
     },
     actions: 
     {
@@ -88,10 +87,10 @@ export default {
           {
              if(response.success == true)
              {
-                Cookies.set("user-auth",response.token);
+                Cookies.set("user-auth",response.data.token);
                 router.push('/dashboard');
                  commit(Types.LOGIN_SUCCESS,response);
-                 
+
              }else
              {
                commit(Types.LOGIN_ERROR,response);
@@ -111,7 +110,7 @@ export default {
              if(response.success == true)
              {
                  commit(Types.REGISTER_SUCCESS,response);
-                 
+
              }else
              {
                commit(Types.REGISTER_ERROR,response);

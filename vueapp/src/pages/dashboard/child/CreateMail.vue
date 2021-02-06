@@ -13,6 +13,9 @@
 
             <form>
 
+
+
+
                 <v-text-field
                         v-model="from"
                         :error-messages="fromErrors"
@@ -60,6 +63,24 @@
                         label="Attach Files Here"
                 ></v-file-input>
 
+
+                <v-alert
+                        dense
+                        text
+                        :type="createMail.success==false?'error':
+                                 createMail.success==true?
+                              'success'
+                           :
+                          ''"
+                        :style="createMail.success==false?'display:block':
+                                 createMail.success==true?
+                              'display:block'
+                           :
+                          'display:none'"
+                >
+                    {{createMail.message}}
+                </v-alert>
+
                 <v-btn
                         class="mr-4 custom-style-btn-one"
                         @click="submit"
@@ -87,6 +108,7 @@
     import { required } from 'vuelidate/lib/validators'
     import { VueEditor } from "vue2-editor";
     import {checkIfFieldsAreEmpty} from "../../../utilities/helperFunc";
+    import {mapState, mapActions} from 'vuex'
 
 
     export default {
@@ -110,6 +132,7 @@
         }),
 
         computed: {
+            ...mapState("Mail", ["createMail"]),
 
             fromErrors () {
                 const errors = []
@@ -146,7 +169,9 @@
             },
         },
 
+
         methods: {
+            ...mapActions("Mail", ["createMailAction","clearCreateMail"]),
             submit () {
                 this.$v.$touch()
                 let dataToCheck = {
@@ -162,27 +187,21 @@
                     return;
                 }
 
-                let dataToSubmit = this.submitWithFormData(dataToCheck);
-                  console.log(dataToSubmit);
+                let fd = new FormData();
+                fd.append('from',this.from);
+                fd.append('to',this.to);
+                fd.append('subject',this.subject);
+                fd.append('html_content',this.html_content);
+                fd.append('text_content',this.text_content);
+                fd.append('attachment',this.files);
+
+                  this.createMailAction(fd);
             },
 
-            submitWithFormData(data)
-            {
-                let formData = new FormData();
-                formData.append('from',data.from);
-                formData.append('to',data.to);
-                formData.append('subject',data.subject);
-                formData.append('html_content',data.html_content);
-                formData.append('text_content',data.text_content);
-                formData.append('attachment',this.files);
-            },
 
-            //once file changes return the file object
             onFileChange(e)
             {
-                this.files = e.target.files;
-                console.log(this.files);
-                return this.files;
+                this.files = e;
             },
 
             clear () {
@@ -195,6 +214,14 @@
             },
 
         },
+
+        beforeRouteLeave (to, from, next) {
+            console.log(this.$store._actions);
+            this.clearCreateMail();
+            next();
+
+        },
+
         components:{
             VueEditor
         }

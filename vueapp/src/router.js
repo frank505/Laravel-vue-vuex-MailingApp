@@ -59,14 +59,14 @@ router.beforeEach((to, from, next) => {
 
     if (to.fullPath === '/dashboard')
     {
-        if(cookies=='' || cookies == null)
+        if(cookies=='' || cookies == null || cookies==undefined )
         {
             next('/login');
         }
     }
 
     if (to.fullPath === '/login') {
-        if(cookies!='' && cookies!=null)
+        if(cookies!='' && cookies!=null && cookies != undefined)
         {
             next('/dashboard');
         }
