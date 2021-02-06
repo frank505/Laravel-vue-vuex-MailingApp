@@ -92,4 +92,17 @@ class MailController extends Controller
      return $this->httpResponse->is200WithResponseData($responseMessage,$data);
 
     }
+
+
+    public function filterMailData(Request $request)
+    {
+        $perPage = 10;
+
+        $filterMail = $this->mails->filterMail($request, $perPage);
+
+        $responseMessage = "filter data";
+
+        return $this->httpResponse->is200WithResponseData($responseMessage,$filterMail);
+
+    }
 }

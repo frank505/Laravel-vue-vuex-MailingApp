@@ -21,6 +21,7 @@ Route::get('/get-mails',[\App\Http\Controllers\MailController::class,'getMailLis
 Route::get('/get-mail/{uuid}',[\App\Http\Controllers\MailController::class,'getSingleMail']);
 Route::get('/get-reciepients-mails/{getReciepientEmail}',[\App\Http\Controllers\MailController::class,
     'getMailsRelatedToReciepients']);
+Route::post("/filter-mail",[\App\Http\Controllers\MailController::class,'filterMailData']);
 
 
 

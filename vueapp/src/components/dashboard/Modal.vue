@@ -20,6 +20,7 @@
                             >
                                 <v-text-field
                                         label="From"
+                                        v-model="from"
                                         required
                                 ></v-text-field>
                             </v-col>
@@ -30,6 +31,7 @@
                             >
                                 <v-text-field
                                         label="To"
+                                        v-model="to"
                                         hint="the person the email was sent to"
                                 ></v-text-field>
                             </v-col>
@@ -40,6 +42,7 @@
                             >
                                 <v-text-field
                                         label="Subject"
+                                        v-model="subject"
                                         hint="the person who sent the email"
                                         persistent-hint
                                         required

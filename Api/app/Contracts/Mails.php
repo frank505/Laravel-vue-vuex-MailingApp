@@ -38,4 +38,12 @@ interface Mails
      */
     public function getLastPostedItemBySpecificUser($PostedBy);
 
+    /***
+     * @param $from
+     * @param $to
+     * @param $subject
+     * @return mixed
+     */
+    public function filterMail($searchData,$perPage);
+
 }

@@ -105,4 +105,33 @@ class Mails extends Model implements MailsContract
 
     }
 
+
+    public function filterMail($searchData,$Perpage)
+    {
+        // TODO: Implement filterMail() method.
+        $from = !isset($searchData->from ) || $searchData->from=='' ||
+        $searchData->from==null ?false:true;
+
+        $to = !isset($searchData->to) || $searchData->to==''
+        || $searchData->to==null ?false:true;
+
+        $subject = !isset($searchData->subject) || $searchData->subject == '' ||
+        $searchData->subject==null ?false:true;
+
+
+        return $this->when($from,function($query) use ($searchData)
+        {
+            return  $query->where("from","LIKE","%$searchData->from%");
+        })
+            ->when($to,function($query) use ($searchData)
+            {
+                return  $query->where("to","LIKE","%$searchData->to%");
+            })
+            ->when($subject,function($query) use ($searchData)
+            {
+                return  $query->where("subject","LIKE","%$searchData->subject%");
+            })->with('attachements')->orderBy("id","DESC")->paginate($Perpage);
+    }
+
+
 }
