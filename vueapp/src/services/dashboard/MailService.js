@@ -16,3 +16,35 @@ export const createMailService = (credentials) => {
             return error;
         });
 };
+
+
+export const getMailListService = (page) => {
+    let tokenId = 'user-auth';
+    const http = new HttpService();
+    let Url = 'get-mails?page='+page;
+    return http
+        .getData(Url, tokenId)
+        .then((data) => {
+            //console.log(data);
+            return data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
+
+export const getSingleMailService = (uuid) => {
+    let tokenId = 'user-auth';
+    const http = new HttpService();
+    let Url = 'get-mail/'+uuid;
+    return http
+        .getData(Url, tokenId)
+        .then((data) => {
+            //console.log(data);
+            return data;
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};

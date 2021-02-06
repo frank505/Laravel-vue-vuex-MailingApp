@@ -171,7 +171,7 @@
 
 
         methods: {
-            ...mapActions("Mail", ["createMailAction","clearCreateMail"]),
+            ...mapActions("Mail", ["createMailAction","clearCreateMailState"]),
             submit () {
                 this.$v.$touch()
                 let dataToCheck = {
@@ -217,7 +217,7 @@
 
         beforeRouteLeave (to, from, next) {
             console.log(this.$store._actions);
-            this.clearCreateMail();
+            this.clearCreateMailState()
             next();
 
         },

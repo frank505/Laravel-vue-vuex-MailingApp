@@ -26,7 +26,7 @@ class Mails extends Model implements MailsContract
 
     public function createMails($request,$PostedBy)
     {
-        Cache::forget('posts_content');
+        Cache::forget('post_content');
         Cache::forget('reciepient_content.'.$request->to);
         Cache::forget('posted_by.'.$PostedBy);
         $uuid = Str::orderedUuid()->toString();
@@ -37,7 +37,7 @@ class Mails extends Model implements MailsContract
               "to"=>$request->to,
               "subject"=>$request->subject,
               "text_content"=>$request->text_content,
-              "html_content"=>$request->html_content,
+              "html_content"=> addslashes($request->html_content),
               "status"=>"Posted"
           ]);
 
@@ -51,10 +51,10 @@ class Mails extends Model implements MailsContract
     {
         // TODO: Implement getMails() method.
 
-       return  Cache::remember('post_content',33600,function() use ($perPage){
+//       return  Cache::remember('post_content',33600,function() use ($perPage){
 
-            return $this->with('attachements')->paginate($perPage);
-        });
+            return $this->with('attachements')->orderBy("id","DESC")->paginate($perPage);
+//        });
 
 
     }

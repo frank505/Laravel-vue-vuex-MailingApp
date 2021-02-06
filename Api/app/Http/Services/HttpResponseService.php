@@ -32,7 +32,8 @@ class HttpResponseService
         throw new HttpResponseException(response()->json(
             [
                 "success"=>false,
-                "message"=>$responseMessage
+                "message"=>$responseMessage,
+                "error"=>$responseMessage
             ], 422));
     }
 
@@ -42,6 +43,7 @@ class HttpResponseService
         throw new HttpResponseException(response()->json(
             [
                 "success"=>false,
+                "error"=>$responseMessage,
                 "message"=>$responseMessage
             ], 500));
     }
@@ -52,6 +54,7 @@ class HttpResponseService
         throw new HttpResponseException(response()->json(
             [
                 "success"=>false,
+                "error"=>$responseMessage,
                 "message"=>$responseMessage
             ], 400));
     }
@@ -60,6 +63,7 @@ class HttpResponseService
     {
         throw new HttpResponseException(response()->json([
             "success"=>false,
+            "error"=>$responseMessge,
             "message"=>$responseMessge,
             "data"=>$data
         ]));

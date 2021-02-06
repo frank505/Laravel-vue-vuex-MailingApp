@@ -1,51 +1,124 @@
 <template>
 
-             <div>
-           <v-row style="border: 1px solid #ccc;padding:2%;margin-top: 30px">
-               <v-col md="8">
-
-                   <span>back</span>
-                   <span>Header of the news</span>
-               </v-col>
-               <v-col md="4">
-                   19:01:2020
-               </v-col>
-
-           </v-row>
-
-           <v-row style="border: 1px solid #ccc;padding:2%;">
-               <v-col md="8">
-
-                   <span>from </span>
-                   <span>to </span>
-               </v-col>
-               <v-col md="4">
-                   Download attached files here
-               </v-col>
-
-           </v-row>
+    <v-card
+            class="mx-auto reduce-width"
+            tile
+    >
 
 
-                 <v-row style="border: 1px solid #ccc;padding:2%;text-align: center">
-                     <v-col md="12">
-                      <b>html content displayed here</b>
-                     </v-col>
+        <v-list-item two-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">Subject</v-list-item-title>
+                <v-list-item-subtitle>{{this.mailData.subject}}</v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item two-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">From</v-list-item-title>
+                <v-list-item-subtitle >{{this.mailData.from}}</v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item two-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">To</v-list-item-title>
+                <v-list-item-subtitle>{{this.mailData.to}}</v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item three-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">Text Message</v-list-item-title>
+                <v-list-item-subtitle >
+                   {{this.mailData.text_content}}
+                </v-list-item-subtitle>
 
 
-                 </v-row>
+            </v-list-item-content>
+        </v-list-item>
 
-             </div>
+
+        <v-list-item three-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">Html Content</v-list-item-title>
+                <v-list-item-subtitle v-html="htmlString"
+                >
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item two-line>
+            <v-list-item-content>
+                <v-list-item-title class="bold-txt">Attachments</v-list-item-title>
+                <v-list-item-subtitle>
+                    <template  v-for="(item,index) in this.mailData.attachements">
+
+                            <a :href="attachedBaseUrl+'/'+item.file_name"
+                               :download="attachedBaseUrl+'/'+item.file_name" style="padding:2%;margin:1px;color:red;"
+                               :key="index">{{item.file_name}}</a>
+
+                    </template>
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
+    </v-card>
 
 
 
 </template>
 
 <script>
+    import {getSingleMailService} from "../../../services/dashboard/MailService";
+
+
     export default {
-        name: "MailList"
+        name: "MailList",
+
+        data: ()=>({
+            mailData:"",
+            attachedBaseUrl:"",
+            htmlString:''
+
+        }),
+
+        methods:{
+            loadMail()
+            {
+               let uuid = this.$router.history.current.params.uuid;
+
+                getSingleMailService(uuid).then((data)=>
+                {
+                    console.log(data);
+                    this.attachedBaseUrl = data.data.base_url;
+                   this.mailData = data.data.data;
+                   this.htmlString = data.data.html_content;
+
+                });
+            }
+        },
+
+        created() {
+            this.loadMail();
+        }
+
     }
 </script>
 
 <style scoped>
-
+ .reduce-width{
+     width: 80%;margin-left: 15%;margin-right: 15%;
+     align-content: center !important;
+     align-items: center !important;
+     text-align: center;
+     margin-top:40px;
+ }
+    .container-div{
+        padding: 1%;
+        border-bottom: 1px solid #ccc;
+    }
+   .bold-txt{
+       font-weight: bolder;
+   }
 </style>
