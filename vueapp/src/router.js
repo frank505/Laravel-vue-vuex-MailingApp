@@ -5,6 +5,8 @@ import Register from './pages/auth/child/Register.vue'
 // import Cookies from 'js-cookie'
 import Home from "./pages/auth/root/Home";
 import Dashboard from "./pages/dashboard/root/Dashboard";
+import MailLists from "./pages/dashboard/child/MailLists";
+import CreateMail from "./pages/dashboard/child/CreateMail";
 
 Vue.use(Router)
 
@@ -29,7 +31,18 @@ const router =  new Router({
         },
         {
             path:'/dashboard',
+            redirect: '/dashboard/mail-lists',
             component:Dashboard,
+            children: [
+                {
+                    path:'mail-lists',
+                    component: MailLists
+                },
+                {
+                    path:'create-mail',
+                    component: CreateMail
+                }
+            ]
         }
     ]
 });

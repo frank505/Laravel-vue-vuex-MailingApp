@@ -1,31 +1,12 @@
 <template>
     <v-card
             class="mx-auto"
-            max-width="500"
+            style="width:100%;"
     >
-        <v-toolbar
-                color="pink"
-                dark
-        >
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-            <v-toolbar-title>Inbox</v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-
-            <v-btn icon>
-                <v-icon>mdi-checkbox-marked-circle</v-icon>
-            </v-btn>
-        </v-toolbar>
 
         <v-list two-line>
             <v-list-item-group
-                    v-model="selected"
-                    active-class="pink--text"
                     multiple
             >
                 <template v-for="(item, index) in items">

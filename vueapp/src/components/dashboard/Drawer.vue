@@ -2,7 +2,7 @@
     <v-app>
     <v-card class="customize-drawerbar">
         <v-navigation-drawer
-                v-model="drawer"
+
                 :mini-variant.sync="mini"
                 permanent
         >
@@ -47,13 +47,13 @@
     export default {
         data () {
             return {
-                drawer: true,
+
                 items: [
                     { title: 'Home', icon: 'mdi-home-city' },
                     { title: 'My Account', icon: 'mdi-account' },
                     { title: 'Users', icon: 'mdi-account-group-outline' },
                 ],
-                mini: false,
+
             }
         },
     }
