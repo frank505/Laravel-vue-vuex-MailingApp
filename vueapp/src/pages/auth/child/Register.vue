@@ -13,6 +13,22 @@
 
             <form>
 
+                <v-alert
+                        dense
+                        text
+                        :type="registerResponse.success==false?'error':
+                                 registerResponse.success==true?
+                              'success'
+                           :
+                          ''"
+                        :style="registerResponse.success==false?'display:block':
+                                 registerResponse.success==true?
+                              'display:block'
+                           :
+                          'display:none'"
+                >
+                    {{registerResponse.message}}
+                </v-alert>
 
                 <v-text-field
                         v-model="name"
@@ -68,6 +84,8 @@
 
     import { validationMixin } from 'vuelidate'
     import { required, maxLength, email } from 'vuelidate/lib/validators'
+    import { mapState, mapActions } from "vuex";
+    import {checkIfFieldsAreEmpty} from "../../../utilities/helperFunc";
 
     export default {
         mixins: [validationMixin],
@@ -106,11 +124,24 @@
                 !this.$v.email.required && errors.push('E-mail is required')
                 return errors
             },
+
+            ...mapState("Auth", ["registerResponse"])
         },
 
         methods: {
+            ...mapActions("Auth", ["register","clearRegisterState"]),
             submit () {
                 this.$v.$touch()
+                let data = {
+                    name:this.name,
+                    email:this.email,
+                    password:this.password
+                };
+                if(checkIfFieldsAreEmpty(data)==false)
+                {
+                    return;
+                }
+                this.register(data);
             },
             goToLoginPage()
             {
@@ -124,6 +155,11 @@
 
             },
         },
+
+        beforeRouteLeave (to, from, next) {
+            this.clearRegisterState();
+            next();
+        }
     }
 
 </script>

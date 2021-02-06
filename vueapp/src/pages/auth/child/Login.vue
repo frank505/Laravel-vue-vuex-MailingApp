@@ -139,6 +139,13 @@
                 this.$router.push('/register');
             }
         },
+        beforeRouteLeave (to, from, next) {
+            console.log(this.$store._actions);
+            this.clearLoginState();
+            next();
+
+        }
+
     }
 
 </script>
