@@ -82,7 +82,7 @@ export default {
 
 
         [Types.HIDE_MAIL_FILTER_MODAL] (state) {
-            state.displayMailModal = "";
+            state.displayMailModal = false;
         },
         [Types.VIEW_MAILS_FILTER_MODAL] (state) {
             state.displayMailModal = true;

@@ -23,7 +23,7 @@
         <v-list-item two-line>
             <v-list-item-content>
                 <v-list-item-title class="bold-txt">To</v-list-item-title>
-                <v-list-item-subtitle>{{this.mailData.to}}</v-list-item-subtitle>
+                <v-list-item-subtitle @click="gotoSpecificUserMail(mailData.to)" class="toStyles">{{this.mailData.to}}</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
 
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import {getSingleMailService} from "../../../services/dashboard/MailService";
+    import { getSingleMailService} from "../../../services/dashboard/MailService";
 
 
     export default {
@@ -84,6 +84,11 @@
         }),
 
         methods:{
+
+            gotoSpecificUserMail(userMail)
+         {
+            this.$router.push("/dashboard/recipients-mail?mail="+userMail);
+         },
             loadMail()
             {
                let uuid = this.$router.history.current.params.uuid;
@@ -121,4 +126,8 @@
    .bold-txt{
        font-weight: bolder;
    }
+    .toStyles{
+        cursor: pointer;
+        text-decoration: underline;
+    }
 </style>
