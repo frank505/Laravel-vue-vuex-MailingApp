@@ -37,6 +37,16 @@ export const LogoutService =()=>
     });
 }
 
+export const setTokenService = (token) =>
+{
+    return new Promise(function(resolve)
+    {
+        Cookies.set('user-auth',token);
+        resolve(true);
+    });
+
+}
+
 
 
 
