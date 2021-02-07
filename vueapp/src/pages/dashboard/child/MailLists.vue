@@ -14,7 +14,7 @@
                     <v-list-item :key="item.title" @click="goToViewSinglePage(item.uuid)">
                         <template>
                             <v-list-item-content>
-                                <v-list-item-title v-text="item.from"
+                                <v-list-item-title v-text="item.to"
                                 style="font-weight: bolder"
                                 ></v-list-item-title>
 
@@ -28,7 +28,7 @@
 
                             <v-list-item-action>
                                 <v-list-item-action-text v-text="item.created_at"></v-list-item-action-text>
-
+                                <v-list-item-action-text v-text="item.status"></v-list-item-action-text>
 
 
 

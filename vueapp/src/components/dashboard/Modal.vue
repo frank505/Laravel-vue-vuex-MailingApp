@@ -18,6 +18,14 @@
                                     sm="12"
                                     md="12"
                             >
+
+                                <v-alert
+                                        type="error"
+                                        :class="showErr==false?'hideStyle':'showStyle'"
+                                >
+                                    Please Ensure not all Filter Fields are Empty
+                                </v-alert>
+
                                 <v-text-field
                                         label="From"
                                         v-model="from"
@@ -82,6 +90,13 @@
 
       export default {
 
+          data: () =>(
+              {
+                 from:'',
+                 to:"",
+                 subject:'',
+                  showErr:false
+              }),
           computed: {
               ...mapState('Mail', ['displayMailModal'])
           },
@@ -90,11 +105,24 @@
              ...mapActions('Mail',['hideMailFilterModal','showMailFilterModal']),
              hideModal()
              {
-                 this.hideMailFilterModal();
+
+                     this.hideMailFilterModal();
              },
              filterModal()
              {
-                 this.hideMailFilterModal();
+                 this.showErr = false;
+
+                 if(this.from=='' && this.to=='' && this.subject=='')
+                 {
+                     this.showErr = true;
+                     return;
+                 }
+
+
+                 this.$router.push('/dashboard/dashboard-filter?from='+
+                      this.from+"&to="+this.to+"&subject="+this.subject);
+
+                 this.hideModal()
              }
          }
       }
@@ -102,5 +130,10 @@
 
 
 <style scoped>
-
+.showStyle{
+    display: block;
+}
+    .hideStyle{
+        display: none;
+    }
 </style>

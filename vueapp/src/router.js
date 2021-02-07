@@ -8,6 +8,8 @@ import Dashboard from "./pages/dashboard/root/Dashboard";
 import MailLists from "./pages/dashboard/child/MailLists";
 import CreateMail from "./pages/dashboard/child/CreateMail";
 import ViewMail from "./pages/dashboard/child/ViewMail";
+import FilterMail from "./pages/dashboard/child/FilterMail";
+import RecipientMailList from "./pages/dashboard/child/RecipientMailList";
 
 
 Vue.use(Router)
@@ -47,6 +49,14 @@ const router =  new Router({
                 {
                     path:'view-mail/:uuid',
                     component: ViewMail
+                },
+                {
+                    path:'dashboard-filter',
+                    component: FilterMail
+                },
+                {
+                    path:'recipients-mail',
+                    component: RecipientMailList
                 }
             ]
         }
