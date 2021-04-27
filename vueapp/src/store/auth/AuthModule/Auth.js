@@ -1,6 +1,5 @@
-import { LoginService, RegisterService } from "../../../services/auth/AuthService";
+import {LoginService, RegisterService, setTokenService} from "../../../services/auth/AuthService";
 import * as Types from "./MutationTypes"
-import Cookies from 'js-cookie'
 import router from '../../../router'
 
 export default {
@@ -87,9 +86,11 @@ export default {
           {
              if(response.success == true)
              {
-                Cookies.set("user-auth",response.data.token);
-                router.push('/dashboard');
-                 commit(Types.LOGIN_SUCCESS,response);
+                 setTokenService(response.data.token).then(()=>
+                 {
+                     router.push('/dashboard');
+                     commit(Types.LOGIN_SUCCESS,response);
+                 });
 
              }else
              {

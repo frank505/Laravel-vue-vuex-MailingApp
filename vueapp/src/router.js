@@ -58,32 +58,24 @@ const router =  new Router({
                     path:'recipients-mail',
                     component: RecipientMailList
                 }
-            ]
+            ],
+
+            beforeEnter(to, from, next) { // => using before enter
+                let cookies = Cookies.get("user-auth");
+
+                if(cookies=='' || cookies == null || cookies==undefined )
+                {
+                    return next('/login');
+
+                }
+
+                return next();
+            }
+
         }
     ]
 });
 
-router.beforeEach((to, from, next) => {
-
-    let cookies = Cookies.get("user-auth");
-
-    if (to.fullPath === '/dashboard')
-    {
-        if(cookies=='' || cookies == null || cookies==undefined )
-        {
-            next('/login');
-        }
-    }
-
-    if (to.fullPath === '/login') {
-        if(cookies!='' && cookies!=null && cookies != undefined)
-        {
-            next('/dashboard');
-        }
-    }
-
-    next();
-});
 
 
 export default router;
